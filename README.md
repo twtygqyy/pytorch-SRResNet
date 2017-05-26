@@ -17,7 +17,7 @@ optional arguments:
   --nEpochs NEPOCHS     number of epochs to train for
   --lr LR               Learning Rate. Default=1e-4
   --step STEP           Sets the learning rate to the initial LR decayed by
-                        momentum every n epochs, Default: n=200
+                        momentum every n epochs, Default: n=500
   --cuda                Use cuda?
   --resume RESUME       Path to checkpoint (default: none)
   --start-epoch START_EPOCH
@@ -32,10 +32,34 @@ optional arguments:
 
 ```
 
-### Todo
 
-Code for testing
+### Test
+```
+usage: test.py [-h] [--cuda] [--model MODEL] [--image IMAGE] [--scale SCALE]
 
-Code for data generation
+PyTorch SRResNet Test
 
-Performance Evalution
+optional arguments:
+  -h, --help     show this help message and exit
+  --cuda         use cuda?
+  --model MODEL  model path
+  --image IMAGE  image name
+  --scale SCALE  scale factor, Default: 4
+```
+We convert Set5 test set images to mat format using Matlab, for best PSNR performance, please use Matlab
+
+### Performance
+  - We provide a pretrained model trained on [291](http://cv.snu.ac.kr/research/VDSR/train_data.zip) images with data augmentation
+  - So far performance in PSNR is not as good as paper, not even comparable. Any suggestion is welcome
+  
+| Dataset        | SRResNet Paper          | SRResNet PyTorch|
+| ------------- |:-------------:| -----:|
+| Set5      | 32.05      | 29.30 |
+| Set14     | 28.49      | 26.43 |
+| BSD100    | 27.58      | 25.76 |
+
+### Result
+From left to right are ground truth, bicubic and SRResNet
+<p>
+  <img src='result/result.png' height='300' width='700'/>
+</p>

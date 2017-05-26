@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser(description="PyTorch SRResNet")
 parser.add_argument("--batchSize", type=int, default=16, help="training batch size")
 parser.add_argument("--nEpochs", type=int, default=500, help="number of epochs to train for")
 parser.add_argument("--lr", type=float, default=1e-4, help="Learning Rate. Default=1e-4")
-parser.add_argument("--step", type=int, default=200, help="Sets the learning rate to the initial LR decayed by momentum every n epochs, Default: n=200")
+parser.add_argument("--step", type=int, default=500, help="Sets the learning rate to the initial LR decayed by momentum every n epochs, Default: n=500")
 parser.add_argument("--cuda", action="store_true", help="Use cuda?")
 parser.add_argument("--resume", default="", type=str, help="Path to checkpoint (default: none)")
 parser.add_argument("--start-epoch", default=1, type=int, help="Manual epoch number (useful on restarts)")
@@ -72,27 +72,15 @@ def main():
             weights = torch.load(opt.pretrained)
             model.load_state_dict(weights['model'].state_dict())
         else:
-            print("=> no model found at '{}'".format(opt.pretrained))  
+            print("=> no model found at '{}'".format(opt.pretrained))
             
     print("===> Setting Optimizer")
-    #optimizer = optim.Adam(model.parameters(), lr=opt.lr, weight_decay=opt.weight_decay, betas = (0.9, 0.999), eps=1e-08)
     optimizer = optim.Adam(model.parameters(), lr=opt.lr)
-    #optimizer = optim.SGD(model.parameters(), lr=opt.lr, momentum=opt.momentum, weight_decay=opt.weight_decay)
 
     print("===> Training")
     for epoch in range(opt.start_epoch, opt.nEpochs + 1): 
         train(training_data_loader, optimizer, model, criterion, epoch)
         save_checkpoint(model, epoch)
-
-def total_gradient(parameters):
-    """Computes a gradient clipping coefficient based on gradient norm."""
-    parameters = list(filter(lambda p: p.grad is not None, parameters))
-    totalnorm = 0
-    for p in parameters: 
-        modulenorm = p.grad.data.norm()
-        totalnorm += modulenorm ** 2
-    totalnorm = totalnorm ** (1./2)
-    return totalnorm
     
 def adjust_learning_rate(optimizer, epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 10 epochs"""
@@ -121,15 +109,12 @@ def train(training_data_loader, optimizer, model, criterion, epoch):
         
         optimizer.zero_grad()
         
-        loss.backward()
-        
-        #nn.utils.clip_grad_norm(model.parameters(),opt.clip)    
+        loss.backward() 
 
         optimizer.step()
         
         if iteration%100 == 0:
             print("===> Epoch[{}]({}/{}): Loss: {:.10f}".format(epoch, iteration, len(training_data_loader), loss.data[0]))
-            print "total gradient", total_gradient(model.parameters())
     
 def save_checkpoint(model, epoch):
     model_out_path = "model/" + "model_epoch_{}.pth".format(epoch)

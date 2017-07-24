@@ -43,7 +43,7 @@ def main():
     cudnn.benchmark = True
         
     print("===> Loading datasets")
-    train_set = DatasetFromHdf5("rgb_24in_96out_coco_scale4.h5")
+    train_set = DatasetFromHdf5("/data/xujiu/proj/SR/pth-sr/data/rgb_srresnet_x4.h5")
     training_data_loader = DataLoader(dataset=train_set, num_workers=opt.threads, batch_size=opt.batchSize, shuffle=True)
 
     print("===> Building model")

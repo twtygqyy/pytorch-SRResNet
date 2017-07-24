@@ -47,6 +47,14 @@ optional arguments:
   --scale SCALE  scale factor, Default: 4
 ```
 We convert Set5 test set images to mat format using Matlab, for best PSNR performance, please use Matlab
+An example of usage is shown as follows:
+```
+python test.py --model model/model_epoch_415.pth --image butterfly_GT --scale 4 --cuda
+```
+
+### Prepare Training dataset
+  - Please refer [Code for Data Generation](https://github.com/twtygqyy/pytorch-vdsr/tree/master/data) for creating training files.
+
 
 ### Performance
   - We provide a pretrained model trained on [291](http://cv.snu.ac.kr/research/VDSR/train_data.zip) images with data augmentation
@@ -54,12 +62,12 @@ We convert Set5 test set images to mat format using Matlab, for best PSNR perfor
   
 | Dataset        | SRResNet Paper          | SRResNet PyTorch|
 | ------------- |:-------------:| -----:|
-| Set5      | 32.05      | 29.30 |
-| Set14     | 28.49      | 26.43 |
-| BSD100    | 27.58      | 25.76 |
+| Set5      | 32.05      | **30.84** |
+| Set14     | 28.49      | **27.71** |
+| BSD100    | 27.58      | **26.21** |
 
 ### Result
 From left to right are ground truth, bicubic and SRResNet
 <p>
-  <img src='result/result.png' height='300' width='700'/>
+  <img src='result/result.png' height='270' width='700'/>
 </p>

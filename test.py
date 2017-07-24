@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser(description="PyTorch SRResNet Test")
 parser.add_argument("--cuda", action="store_true", help="use cuda?")
-parser.add_argument("--model", default="model/model_epoch_400.pth", type=str, help="model path")
+parser.add_argument("--model", default="model/model_epoch_415.pth", type=str, help="model path")
 parser.add_argument("--image", default="butterfly_GT", type=str, help="image name")
 parser.add_argument("--scale", default=4, type=int, help="scale factor, Default: 4")
 

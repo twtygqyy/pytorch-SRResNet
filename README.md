@@ -53,7 +53,8 @@ python test.py --model model/model_epoch_415.pth --image butterfly_GT --scale 4 
 ```
 
 ### Prepare Training dataset
-  - Please refer [Code for Data Generation](https://github.com/twtygqyy/pytorch-vdsr/tree/master/data) for creating training files.
+  - Please refer [Code for Data Generation](https://github.com/twtygqyy/pytorch-SRResNet/tree/master/data) for creating training files.
+  - Data augmentations including flipping, rotation, downsizing are adopted.
 
 
 ### Performance

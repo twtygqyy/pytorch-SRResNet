@@ -43,7 +43,7 @@ def main():
     cudnn.benchmark = True
         
     print("===> Loading datasets")
-    train_set = DatasetFromHdf5("/data/xujiu/proj/SR/pth-sr/data/rgb_srresnet_x4.h5")
+    train_set = DatasetFromHdf5("/path/to/your/hdf5/data/like/rgb_srresnet_x4.h5")
     training_data_loader = DataLoader(dataset=train_set, num_workers=opt.threads, batch_size=opt.batchSize, shuffle=True)
 
     print("===> Building model")
@@ -83,7 +83,7 @@ def main():
         save_checkpoint(model, epoch)
     
 def adjust_learning_rate(optimizer, epoch):
-    """Sets the learning rate to the initial LR decayed by 10 every 10 epochs"""
+    """Sets the learning rate to the initial LR decayed by 10"""
     lr = opt.lr * (0.1 ** (epoch // opt.step))
     return lr    
 
@@ -109,7 +109,7 @@ def train(training_data_loader, optimizer, model, criterion, epoch):
         
         optimizer.zero_grad()
         
-        loss.backward() 
+        loss.backward()
 
         optimizer.step()
         

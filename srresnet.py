@@ -3,7 +3,7 @@ import torch.nn as nn
 import math
 import torch.nn.init as init
 
-class _Residual_Block(nn.Module): 
+class _Residual_Block(nn.Module):
     def __init__(self):
         super(_Residual_Block, self).__init__()
         
@@ -13,7 +13,7 @@ class _Residual_Block(nn.Module):
         self.conv2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(64)
         
-    def forward(self, x): 
+    def forward(self, x):
         identity_data = x
         output = self.relu(self.bn1(self.conv1(x)))
         output = self.bn2(self.conv2(output))

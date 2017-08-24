@@ -63,9 +63,9 @@ python test.py --model model/model_epoch_415.pth --image butterfly_GT --scale 4 
   
 | Dataset        | SRResNet Paper          | SRResNet PyTorch|
 | ------------- |:-------------:| -----:|
-| Set5      | 32.05      | **30.84** |
-| Set14     | 28.49      | **27.71** |
-| BSD100    | 27.58      | **26.21** |
+| Set5      | 32.05      | **30.87** |
+| Set14     | 28.49      | **27.90** |
+| BSD100    | 27.58      | **26.73** |
 
 ### Result
 From left to right are ground truth, bicubic and SRResNet

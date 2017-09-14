@@ -8,8 +8,8 @@ usage: main.py [-h] [--batchSize BATCHSIZE] [--nEpochs NEPOCHS] [--lr LR]
                [--step STEP] [--cuda] [--resume RESUME]
                [--start-epoch START_EPOCH] [--clip CLIP] [--threads THREADS]
                [--momentum MOMENTUM] [--weight-decay WEIGHT_DECAY]
-               [--pretrained PRETRAINED]
-               
+               [--pretrained PRETRAINED] [--vgg_loss]
+
 optional arguments:
   -h, --help            show this help message and exit
   --batchSize BATCHSIZE
@@ -29,9 +29,13 @@ optional arguments:
                         weight decay, Default: 0
   --pretrained PRETRAINED
                         path to pretrained model (default: none)
+  --vgg_loss            Use content loss?
 
 ```
-
+An example of training usage is shown as follows:
+```
+python main.py --cuda --vgg_loss
+```
 
 ### Test
 ```

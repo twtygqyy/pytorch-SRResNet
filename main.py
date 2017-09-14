@@ -8,6 +8,8 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from srresnet import Net
 from dataset import DatasetFromHdf5
+from torchvision import models
+import torch.utils.model_zoo as model_zoo
 
 # Training settings
 parser = argparse.ArgumentParser(description="PyTorch SRResNet")
@@ -23,10 +25,11 @@ parser.add_argument("--threads", type=int, default=1, help="Number of threads fo
 parser.add_argument("--momentum", default=0.9, type=float, help="Momentum, Default: 0.9")
 parser.add_argument("--weight-decay", "--wd", default=0, type=float, help="weight decay, Default: 0")
 parser.add_argument("--pretrained", default="", type=str, help="path to pretrained model (default: none)")
+parser.add_argument("--vgg_loss", action="store_true", help="Use content loss?")
 
 def main():
 
-    global opt, model 
+    global opt, model, netContent
     opt = parser.parse_args()
     print(opt)    
 
@@ -46,6 +49,21 @@ def main():
     train_set = DatasetFromHdf5("/path/to/your/hdf5/data/like/rgb_srresnet_x4.h5")
     training_data_loader = DataLoader(dataset=train_set, num_workers=opt.threads, batch_size=opt.batchSize, shuffle=True)
 
+    if opt.vgg_loss:
+        print('===> Loading VGG model')
+        netVGG = models.vgg19()
+        netVGG.load_state_dict(model_zoo.load_url('https://download.pytorch.org/models/vgg19-dcbb9e9d.pth'))
+        class _content_model(nn.Module):
+            def __init__(self):
+                super(_content_model, self).__init__()
+                self.feature = nn.Sequential(*list(netVGG.features.children())[:-1])
+                
+            def forward(self, x):
+                out = self.feature(x)
+                return out
+
+        netContent = _content_model()
+
     print("===> Building model")
     model = Net()
     criterion = nn.MSELoss(size_average=False)
@@ -53,7 +71,9 @@ def main():
     print("===> Setting GPU")
     if cuda:
         model = model.cuda()
-        criterion = criterion.cuda()  
+        criterion = criterion.cuda()
+        if opt.vgg_loss:
+            netContent = netContent.cuda() 
 
     # optionally resume from a checkpoint
     if opt.resume:
@@ -78,7 +98,7 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=opt.lr)
 
     print("===> Training")
-    for epoch in range(opt.start_epoch, opt.nEpochs + 1): 
+    for epoch in range(opt.start_epoch, opt.nEpochs + 1):
         train(training_data_loader, optimizer, model, criterion, epoch)
         save_checkpoint(model, epoch)
     
@@ -105,16 +125,30 @@ def train(training_data_loader, optimizer, model, criterion, epoch):
             input = input.cuda()
             target = target.cuda()
         
-        loss = criterion(model(input), target)
+        output = model(input)
+        loss = criterion(output, target)
+
+        if opt.vgg_loss:
+            content_input = netContent(output)
+            content_target = netContent(target)
+            content_target = content_target.detach()
+            content_loss = criterion(content_input, content_target)
         
         optimizer.zero_grad()
+
+        if opt.vgg_loss:
+            netContent.zero_grad()
+            content_loss.backward(retain_variables=True)
         
         loss.backward()
 
         optimizer.step()
         
         if iteration%100 == 0:
-            print("===> Epoch[{}]({}/{}): Loss: {:.10f}".format(epoch, iteration, len(training_data_loader), loss.data[0]))
+            if opt.vgg_loss:
+                print("===> Epoch[{}]({}/{}): Loss: {:.10f} Content_loss {:.10f}".format(epoch, iteration, len(training_data_loader), loss.data[0], content_loss.data[0]))
+            else:
+                print("===> Epoch[{}]({}/{}): Loss: {:.10f}".format(epoch, iteration, len(training_data_loader), loss.data[0]))
     
 def save_checkpoint(model, epoch):
     model_out_path = "model/" + "model_epoch_{}.pth".format(epoch)

@@ -45,10 +45,28 @@ optional arguments:
   --dataset DATASET  dataset name
   --scale SCALE      scale factor, Default: 4
 ```
-We convert Set5 test set images to mat format using Matlab, for best PSNR performance, please use Matlab
+We convert Set5 test set images to mat format using Matlab, for simple image reading
 An example of usage is shown as follows:
 ```
-python test.py --model model/model_srresnet.pth --dataset Set5 --image butterfly_GT --scale 4 --cuda
+python demo.py --model model/model_srresnet.pth --dataset Set5 --image butterfly_GT --scale 4 --cuda
+```
+
+### Eval
+```
+usage: eval.py [-h] [--cuda] [--model MODEL] [--dataset DATASET]
+               [--scale SCALE]
+
+optional arguments:
+  -h, --help         show this help message and exit
+  --cuda             use cuda?
+  --model MODEL      model path
+  --dataset DATASET  dataset name, Default: Set5
+  --scale SCALE      scale factor, Default: 4
+```
+We convert Set5 test set images to mat format using Matlab. Since PSNR is evaluated on only Y channel, we import matlab in python, and use rgb2ycbcr function for converting rgb image to ycbcr image. You will have to setup the matlab python interface so as to import matlab library. 
+An example of usage is shown as follows:
+```
+python eval.py --model model/model_srresnet.pth --dataset Set5 --cuda
 ```
 
 ### Prepare Training dataset

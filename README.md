@@ -4,11 +4,10 @@ Implementation of Paper: "Photo-Realistic Single Image Super-Resolution Using a 
 ## Usage
 ### Training
 ```
-usage: main.py [-h] [--batchSize BATCHSIZE] [--nEpochs NEPOCHS] [--lr LR]
-               [--step STEP] [--cuda] [--resume RESUME]
-               [--start-epoch START_EPOCH] [--clip CLIP] [--threads THREADS]
-               [--momentum MOMENTUM] [--weight-decay WEIGHT_DECAY]
-               [--pretrained PRETRAINED] [--vgg_loss]
+usage: main_srresnet.py [-h] [--batchSize BATCHSIZE] [--nEpochs NEPOCHS]
+                        [--lr LR] [--step STEP] [--cuda] [--resume RESUME]
+                        [--start-epoch START_EPOCH] [--threads THREADS]
+                        [--pretrained PRETRAINED] [--vgg_loss]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -22,11 +21,7 @@ optional arguments:
   --resume RESUME       Path to checkpoint (default: none)
   --start-epoch START_EPOCH
                         Manual epoch number (useful on restarts)
-  --clip CLIP           Clipping Gradients. Default=0.1
   --threads THREADS     Number of threads for data loader to use, Default: 1
-  --momentum MOMENTUM   Momentum, Default: 0.9
-  --weight-decay WEIGHT_DECAY, --wd WEIGHT_DECAY
-                        weight decay, Default: 0
   --pretrained PRETRAINED
                         path to pretrained model (default: none)
   --vgg_loss            Use content loss?
@@ -34,26 +29,26 @@ optional arguments:
 ```
 An example of training usage is shown as follows:
 ```
-python main.py --cuda --vgg_loss
+python main_srresnet.py --cuda --vgg_loss
 ```
 
-### Test
+### demo
 ```
-usage: test.py [-h] [--cuda] [--model MODEL] [--image IMAGE] [--scale SCALE]
-
-PyTorch SRResNet Test
+usage: demo.py [-h] [--cuda] [--model MODEL] [--image IMAGE]
+               [--dataset DATASET] [--scale SCALE]
 
 optional arguments:
-  -h, --help     show this help message and exit
-  --cuda         use cuda?
-  --model MODEL  model path
-  --image IMAGE  image name
-  --scale SCALE  scale factor, Default: 4
+  -h, --help         show this help message and exit
+  --cuda             use cuda?
+  --model MODEL      model path
+  --image IMAGE      image name
+  --dataset DATASET  dataset name
+  --scale SCALE      scale factor, Default: 4
 ```
 We convert Set5 test set images to mat format using Matlab, for best PSNR performance, please use Matlab
 An example of usage is shown as follows:
 ```
-python test.py --model model/model_epoch_415.pth --image butterfly_GT --scale 4 --cuda
+python test.py --model model/model_srresnet.pth --dataset Set5 --image butterfly_GT --scale 4 --cuda
 ```
 
 ### Prepare Training dataset
@@ -63,13 +58,14 @@ python test.py --model model/model_epoch_415.pth --image butterfly_GT --scale 4 
 
 ### Performance
   - We provide a pretrained model trained on [291](http://cv.snu.ac.kr/research/VDSR/train_data.zip) images with data augmentation
-  - So far performance in PSNR is not as good as paper, not even comparable. Any suggestion is welcome
+  - Instance Normalization is applied instead of Batch Normalization for better performance 
+  - So far performance in PSNR is not as good as paper, any suggestion is welcome
   
 | Dataset        | SRResNet Paper          | SRResNet PyTorch|
 | ------------- |:-------------:| -----:|
-| Set5      | 32.05      | **30.87** |
-| Set14     | 28.49      | **27.90** |
-| BSD100    | 27.58      | **26.73** |
+| Set5      | 32.05      | **31.52** |
+| Set14     | 28.49      | **27.95** |
+| BSD100    | 27.58      | **27.17** |
 
 ### Result
 From left to right are ground truth, bicubic and SRResNet

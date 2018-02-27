@@ -6,9 +6,9 @@ import time, math
 import scipy.io as sio
 import matplotlib.pyplot as plt
 
-parser = argparse.ArgumentParser(description="PyTorch SRResNet Demo")
+parser = argparse.ArgumentParser(description="PyTorch SRGAN Demo")
 parser.add_argument("--cuda", action="store_true", help="use cuda?")
-parser.add_argument("--model", default="model/model_srresnet.pth", type=str, help="model path")
+parser.add_argument("--model", default="model/model_srgan.pth", type=str, help="model path")
 parser.add_argument("--image", default="butterfly_GT", type=str, help="image name")
 parser.add_argument("--dataset", default="Set5", type=str, help="dataset name")
 parser.add_argument("--scale", default=4, type=int, help="scale factor, Default: 4")

@@ -7,9 +7,9 @@ import time, math, glob
 import scipy.io as sio
 import cv2
 
-parser = argparse.ArgumentParser(description="PyTorch SRResNet Eval")
+parser = argparse.ArgumentParser(description="PyTorch SRGAN Eval")
 parser.add_argument("--cuda", action="store_true", help="use cuda?")
-parser.add_argument("--model", default="model/model_srresnet.pth", type=str, help="model path")
+parser.add_argument("--model", default="model/model_srgan.pth", type=str, help="model path")
 parser.add_argument("--dataset", default="Set5", type=str, help="dataset name, Default: Set5")
 parser.add_argument("--scale", default=4, type=int, help="scale factor, Default: 4")
 

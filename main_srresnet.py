@@ -43,8 +43,7 @@ def main():
     cudnn.benchmark = True
 
     print("===> Loading datasets")
-    train_set = DatasetFromHdf5('../../srresnet_full_x4.h5')
-    #train_set = DatasetFromHdf5("/path/to/your/hdf5/data/like/rgb_srresnet_x4.h5")
+    train_set = DatasetFromHdf5("/path/to/your/hdf5/data/like/rgb_srresnet_x4.h5")
     training_data_loader = DataLoader(dataset=train_set, num_workers=opt.threads, \
         batch_size=opt.batchSize, shuffle=True)
 
@@ -111,9 +110,9 @@ def train(training_data_loader, optimizer, model, criterion, epoch):
     lr = adjust_learning_rate(optimizer, epoch-1)
     
     for param_group in optimizer.param_groups:
-        param_group["lr"] = lr  
+        param_group["lr"] = lr
 
-    print "epoch =", epoch,"lr =",optimizer.param_groups[0]["lr"]
+    print("Epoch={}, lr={}".format(epoch, optimizer.param_groups[0]["lr"]))
     model.train()
 
     for iteration, batch in enumerate(training_data_loader, 1):

@@ -37,7 +37,7 @@ im_l = sio.loadmat("testsets/" + opt.dataset + "/" + opt.image + ".mat")['im_l']
            
 im_gt = im_gt.astype(float).astype(np.uint8)
 im_b = im_b.astype(float).astype(np.uint8)
-im_l = im_l.astype(float).astype(np.uint8)      
+im_l = im_l.astype(float).astype(np.uint8)
 
 im_input = im_l.astype(np.float32).transpose(2,0,1)
 im_input = im_input.reshape(1,im_input.shape[0],im_input.shape[1],im_input.shape[2])
@@ -59,7 +59,7 @@ im_h = out.data[0].numpy().astype(np.float32)
 
 im_h = im_h*255.
 im_h[im_h<0] = 0
-im_h[im_h>255.] = 255.            
+im_h[im_h>255.] = 255.
 im_h = im_h.transpose(1,2,0)
 
 print("Dataset=",opt.dataset)
@@ -77,5 +77,5 @@ ax.set_title("Input(Bicubic)")
 
 ax = plt.subplot("133")
 ax.imshow(im_h.astype(np.uint8))
-ax.set_title("Output(SRResNet)")
+ax.set_title("Output(SRGAN)")
 plt.show()

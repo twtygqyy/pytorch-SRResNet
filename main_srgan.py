@@ -45,7 +45,7 @@ def main():
     cudnn.benchmark = True
 
     print("===> Loading datasets")
-    #train_set = DatasetFromHdf5("/path/to/your/hdf5/data/like/rgb_srresnet_x4.h5")
+    train_set = DatasetFromHdf5("/path/to/your/hdf5/data/like/rgb_srresnet_x4.h5")
     training_data_loader = DataLoader(dataset=train_set, num_workers=opt.threads, \
         batch_size=opt.batchSize, shuffle=True)
 
@@ -67,7 +67,7 @@ def main():
     print("===> Building generator model")
     netG = _NetG()
 
-    print("===> Building discriminator model")    
+    print("===> Building discriminator model")
     netD = _NetD()
 
     print("===> Building criterions")  
@@ -137,8 +137,8 @@ def train(training_data_loader, optimizerG, optimizerD, netG, netD, netContent, 
     for param_group in optimizerD.param_groups:
         param_group["lr"] = lrD
 
-    print "epoch =", epoch," lrG =",optimizerG.param_groups[0]["lr"], \
-        "lrD =",optimizerD.param_groups[0]["lr"]
+    print("===> Epoch[{}]: lrG: {} lrD: {} ".format(epoch, \
+            optimizerG.param_groups[0]["lr"], optimizerD.param_groups[0]["lr"]))
 
     netG.train()
     netD.train()
@@ -148,7 +148,7 @@ def train(training_data_loader, optimizerG, optimizerD, netG, netD, netContent, 
     adversarial_weight = torch.FloatTensor([0.001])
 
     real_label = 1
-    fake_label = 0    
+    fake_label = 0
 
     for iteration, batch in enumerate(training_data_loader, 1):
 
@@ -177,9 +177,7 @@ def train(training_data_loader, optimizerG, optimizerD, netG, netD, netContent, 
         errD_real.backward()
 
         # train with fake
-        #input_G = Variable(input.data, volatile = True)
         fake = netG(input)
-        #fake_D = Variable(netG(input_G).data)
         label.data.fill_(fake_label)
 
         output = netD(fake.detach())
@@ -214,7 +212,8 @@ def train(training_data_loader, optimizerG, optimizerD, netG, netD, netContent, 
         if iteration%10 == 0:
             print("===> Epoch[{}]({}/{}): LossD: {:.10f} [{:.10f} - {:.10f}] LossG: [{:.5f} + {:.5f}]".format(epoch, iteration, len(training_data_loader), 
                   errD.data[0], errD_real.data[0], errD_fake.data[0], errG.data[0], content_loss.data[0]))            
-            print "gradient_D:", total_gradient(netD.parameters()), "gradient_G:", total_gradient(netG.parameters())
+            print("===> gradient_D: {:.5f} gradient_G: {:.5f} ".format(\
+                total_gradient(netD.parameters()), total_gradient(netG.parameters())))
 
 def save_checkpoint(model, epoch):
     model_out_path = "srgan_checkpoint/" + "srgan_model_epoch_{}.pth".format(epoch)

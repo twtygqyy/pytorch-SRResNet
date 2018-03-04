@@ -83,6 +83,12 @@ python eval.py --model model/model_srgan.pth --dataset Set5 --cuda
   
 | Dataset        | SRResNet PyTorch          | SRGAN PyTorch|
 | ------------- |:-------------:| -----:|
-| Set5      | **31.52**      | - |
-| Set14     | **27.95**      | - |
-| BSD100    | **27.17**      | - |
+| Set5      | **31.52**      | **21.82** |
+| Set14     | **27.95**      | **20.47** |
+| BSD100    | **27.17**      | **20.31** |
+
+### Result
+From left to right are ground truth, bicubic and SRGAN, the result for SRGAN still has significant artifacts and checkerboard issues, any suggestion is welcome
+<p>
+  <img src='result/result_srgan.png' height='270' width='700'/>
+</p>

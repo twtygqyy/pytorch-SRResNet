@@ -1,5 +1,5 @@
 import matlab.engine
-import argparse
+import argparse, os
 import torch
 from torch.autograd import Variable
 import numpy as np
@@ -12,6 +12,7 @@ parser.add_argument("--cuda", action="store_true", help="use cuda?")
 parser.add_argument("--model", default="model/model_srresnet.pth", type=str, help="model path")
 parser.add_argument("--dataset", default="Set5", type=str, help="dataset name, Default: Set5")
 parser.add_argument("--scale", default=4, type=int, help="scale factor, Default: 4")
+parser.add_argument("--gpus", default="0", type=str, help="gpu ids (default: 0)")
 
 def PSNR(pred, gt, shave_border=0):
     height, width = pred.shape[:2]
@@ -27,8 +28,11 @@ opt = parser.parse_args()
 cuda = opt.cuda
 eng = matlab.engine.start_matlab()
 
-if cuda and not torch.cuda.is_available():
-    raise Exception("No GPU found, please run without --cuda")
+if cuda:
+    print("=> use gpu id: '{}'".format(opt.gpus))
+    os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpus
+    if not torch.cuda.is_available():
+            raise Exception("No GPU found or Wrong gpu id, please run without --cuda")
 
 model = torch.load(opt.model)["model"]
 

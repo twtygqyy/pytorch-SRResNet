@@ -23,6 +23,7 @@ parser.add_argument("--start-epoch", default=1, type=int, help="Manual epoch num
 parser.add_argument("--threads", type=int, default=0, help="Number of threads for data loader to use, Default: 1")
 parser.add_argument("--pretrained", default="", type=str, help="path to pretrained model (default: none)")
 parser.add_argument("--vgg_loss", action="store_true", help="Use content loss?")
+parser.add_argument("--gpus", default="0", type=str, help="gpu ids (default: 0)")
 
 def main():
 
@@ -31,8 +32,11 @@ def main():
     print(opt)
 
     cuda = opt.cuda
-    if cuda and not torch.cuda.is_available():
-        raise Exception("No GPU found, please run without --cuda")
+    if cuda:
+        print("=> use gpu id: '{}'".format(opt.gpus))
+        os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpus
+        if not torch.cuda.is_available():
+                raise Exception("No GPU found or Wrong gpu id, please run without --cuda")
 
     opt.seed = random.randint(1, 10000)
     print("Random Seed: ", opt.seed)

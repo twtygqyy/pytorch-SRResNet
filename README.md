@@ -7,7 +7,7 @@ Implementation of Paper: "Photo-Realistic Single Image Super-Resolution Using a 
 usage: main_srresnet.py [-h] [--batchSize BATCHSIZE] [--nEpochs NEPOCHS]
                         [--lr LR] [--step STEP] [--cuda] [--resume RESUME]
                         [--start-epoch START_EPOCH] [--threads THREADS]
-                        [--pretrained PRETRAINED] [--vgg_loss]
+                        [--pretrained PRETRAINED] [--vgg_loss] [--gpus GPUS]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -25,17 +25,17 @@ optional arguments:
   --pretrained PRETRAINED
                         path to pretrained model (default: none)
   --vgg_loss            Use content loss?
-
+  --gpus GPUS           gpu ids (default: 0)
 ```
 An example of training usage is shown as follows:
 ```
-python main_srresnet.py --cuda --vgg_loss
+python main_srresnet.py --cuda --vgg_loss --gpus 0
 ```
 
 ### demo
 ```
 usage: demo.py [-h] [--cuda] [--model MODEL] [--image IMAGE]
-               [--dataset DATASET] [--scale SCALE]
+               [--dataset DATASET] [--scale SCALE] [--gpus GPUS]
 
 optional arguments:
   -h, --help         show this help message and exit
@@ -44,6 +44,7 @@ optional arguments:
   --image IMAGE      image name
   --dataset DATASET  dataset name
   --scale SCALE      scale factor, Default: 4
+  --gpus GPUS        gpu ids (default: 0)
 ```
 We convert Set5 test set images to mat format using Matlab, for simple image reading
 An example of usage is shown as follows:
@@ -54,7 +55,7 @@ python demo.py --model model/model_srresnet.pth --dataset Set5 --image butterfly
 ### Eval
 ```
 usage: eval.py [-h] [--cuda] [--model MODEL] [--dataset DATASET]
-               [--scale SCALE]
+               [--scale SCALE] [--gpus GPUS]
 
 optional arguments:
   -h, --help         show this help message and exit
@@ -62,6 +63,7 @@ optional arguments:
   --model MODEL      model path
   --dataset DATASET  dataset name, Default: Set5
   --scale SCALE      scale factor, Default: 4
+  --gpus GPUS        gpu ids (default: 0)
 ```
 We convert Set5 test set images to mat format using Matlab. Since PSNR is evaluated on only Y channel, we import matlab in python, and use rgb2ycbcr function for converting rgb image to ycbcr image. You will have to setup the matlab python interface so as to import matlab library. 
 An example of usage is shown as follows:
@@ -88,5 +90,5 @@ python eval.py --model model/model_srresnet.pth --dataset Set5 --cuda
 ### Result
 From left to right are ground truth, bicubic and SRResNet
 <p>
-  <img src='result/result.png' height='270' width='700'/>
+  <img src='result/result.png' height='260' width='700'/>
 </p>

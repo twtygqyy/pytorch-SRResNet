@@ -23,8 +23,8 @@ parser.add_argument("--resume", default="", type=str, help="Path to checkpoint (
 parser.add_argument("--start-epoch", default=1, type=int, help="Manual epoch number (useful on restarts)")
 parser.add_argument("--threads", type=int, default=1, help="Number of threads for data loader to use, Default: 1")
 parser.add_argument("--pretrained", default="", type=str, help="path to pretrained model (default: none)")
-parser.add_argument('--clamp_lower', type=float, default=-0.01)
-parser.add_argument('--clamp_upper', type=float, default=0.01)
+parser.add_argument("--clamp", type=float, default=0.01)
+parser.add_argument("--gpus", default="0", type=str, help="gpu ids (default: 0)")
 
 def main():
 
@@ -33,8 +33,12 @@ def main():
     print(opt)
 
     cuda = opt.cuda
-    if cuda and not torch.cuda.is_available():
-        raise Exception("No GPU found, please run without --cuda")
+
+    if cuda:
+        print("=> use gpu id: '{}'".format(opt.gpus))
+        os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpus
+        if not torch.cuda.is_available():
+                raise Exception("No GPU found or Wrong gpu id, please run without --cuda")
 
     opt.seed = random.randint(1, 10000)
     print("Random Seed: ", opt.seed)
@@ -168,7 +172,7 @@ def train(training_data_loader, optimizerG, optimizerD, netG, netD, netContent, 
         netD.zero_grad()
 
         for p in netD.parameters(): # reset requires_grad
-            p.data.clamp_(opt.clamp_lower, opt.clamp_upper)
+            p.data.clamp_(-opt.clamp, opt.clamp)
 
         # train with real
         label.data.resize_(opt.batchSize).fill_(real_label)

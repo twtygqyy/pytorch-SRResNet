@@ -81,11 +81,11 @@ python eval.py --model model/model_srresnet.pth --dataset Set5 --cuda
   - Instance Normalization is applied instead of Batch Normalization for better performance 
   - So far performance in PSNR is not as good as paper, any suggestion is welcome
   
-| Dataset        | SRResNet Paper          | SRResNet PyTorch|
-| ------------- |:-------------:| -----:|
-| Set5      | 32.05      | **31.52** |
-| Set14     | 28.49      | **27.95** |
-| BSD100    | 27.58      | **27.17** |
+| Dataset        | SRResNet Paper | SRResNet PyTorch|
+| :-------------:|:--------------:|:---------------:|
+| Set5           | 32.05          | **31.64**       |
+| Set14          | 28.49          | **28.18**       |
+| BSD100         | 27.58          | **27.47**       |
 
 ### Result
 From left to right are ground truth, bicubic and SRResNet

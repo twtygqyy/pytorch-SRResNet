@@ -83,10 +83,10 @@ python eval.py --model model/model_srgan.pth --dataset Set5 --cuda
   - Instance Normalization is applied instead of Batch Normalization for better performance
   
 | Dataset   | SRResNet PyTorch| SRGAN PyTorch|
-| ----------|:---------------:|:------------:|
-| Set5      | **31.52**       |    **22.27** |
-| Set14     | **27.95**       |    **20.81** |
-| BSD100    | **27.17**       |    **20.42** |
+| :--------:|:---------------:|:------------:|
+| Set5      | **31.52**       |    **25.23** |
+| Set14     | **27.95**       |    **23.08** |
+| BSD100    | **27.17**       |    **22.72** |
 
 ### Result
 From left to right are ground truth, bicubic and SRGAN, the result for SRGAN still has significant artifacts and checkerboard issues, any suggestion is welcome

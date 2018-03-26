@@ -83,9 +83,9 @@ python eval.py --model model/model_srresnet.pth --dataset Set5 --cuda
   
 | Dataset        | SRResNet Paper | SRResNet PyTorch|
 | :-------------:|:--------------:|:---------------:|
-| Set5           | 32.05          | **31.64**       |
-| Set14          | 28.49          | **28.18**       |
-| BSD100         | 27.58          | **27.47**       |
+| Set5           | 32.05          | **31.80**       |
+| Set14          | 28.49          | **28.25**       |
+| BSD100         | 27.58          | **27.51**       |
 
 ### Result
 From left to right are ground truth, bicubic and SRResNet
